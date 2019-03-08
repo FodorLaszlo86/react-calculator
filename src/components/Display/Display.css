@@ -1,0 +1,38 @@
+.CalcDisplay {
+    font-size: 1.8rem;
+    border: .3rem solid rgba(80, 80, 80, 0.644);
+    border-radius: .5rem;
+    margin: 1rem 2rem 0;
+    height: 15%;
+    background-color: rgb(208, 245, 243);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.MainDisplay {
+    flex: 1;
+    font-size: 2.25rem;
+    padding: .5rem 1rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: rgb(41, 41, 124);
+}
+
+.SecondaryDisplay {
+    font-size: 1.3rem;
+    color: rgb(49, 23, 9);
+    opacity: .85;
+    padding: .3rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.MemoryDisplay {
+    font-size: 1.15rem;
+    opacity: .7;
+}
+
+.ProcessDisplay {}

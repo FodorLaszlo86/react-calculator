@@ -15,9 +15,9 @@ class Calculator extends Component {
     super(props);
 
     this.state = {
-        formula: ['33', '*', '12', '+'],
-        memory: '2.085',
-        currentEl: '13.56',
+        formula: [],
+        memory: '',
+        currentEl: '',
         result: null,
         equalityPressed: false
     }
@@ -28,15 +28,50 @@ class Calculator extends Component {
     const btnVal = e.target.textContent;
 
     switch (btnVal !== undefined) {
-      case btnVal === 'CE':
-        this.resetCalculator();
+
+      case /\.|[0-9]/.test(btnVal):
+        this.buildNumber(btnVal);
         break;
+
+      case /^C$/.test(btnVal):
+        this.clearMainDisplay();
+        break;
+
+      case /^CE$/.test(btnVal):
+        this.resetCalculator();
+        console.log('State after reset', this.state);
+        break;
+
       default:
         console.log('End of Switch statement')
     }
   }
 
-  resetCalculator = (e) => {
+  buildNumber = async (char) => {
+    let oldNumber = this.state.currentEl;
+    let updatedNumber;
+    if(oldNumber.includes('.') && char === '.') {
+      updatedNumber = oldNumber;
+    } 
+    else if(oldNumber.startsWith('0') && char === '0') {
+      updatedNumber = oldNumber.slice(1, -1);
+    }
+    else {
+      updatedNumber = oldNumber + char;
+    }
+    await this.setState({
+      currentEl: updatedNumber
+    })
+    console.log('State after buildnumber', this.state);
+  }
+
+  clearMainDisplay = () => {
+    this.setState({
+      currentEl: ''
+    })
+  }
+
+  resetCalculator = () => {
       this.setState({
         formula: [],
         memory: '',
@@ -52,9 +87,9 @@ class Calculator extends Component {
       <div className={ classes.Calculator }>
           <Header />
           <Display 
-              formula={ formula } 
-              memory={ memory } 
-              currentEl={ currentEl } 
+              displayFormula={ formula.length > 0 ? formula.join(' ') : '' } 
+              displayMemory={ memory !== '' ? `M: ${ memory }` : '' } 
+              displayCurrent={ currentEl === '' ? '0' : currentEl } 
           />
           <Buttons handleCalculator={ this.handleCalculator } />
       </div>

@@ -15,7 +15,7 @@ class Calculator extends Component {
     this.state = {
         formula: ['33.56', '/', '12'],
         memory: '12.555',
-        currentEl: '-33.063',
+        currentEl: '9',
         operator: '',
         equalityPressed: false
     }
@@ -28,29 +28,20 @@ class Calculator extends Component {
 
 
       case (/=/.test(btnVal)):
-       this.setState({
-         currentEl: this.getResult(this.state.formula),
-         equalityPressed: true,
-         memory: this.getResult(this.state.formula),
-         formula: []
-       });
-       break;
+        this.handleEqualityPress();
+        break;
 
-      case (/^[+/-]/.test(btnVal)):
-        this.setState({
-          currentEl: this.state.currentEl * -1
-        });
+      case (/^\/$/).test(btnVal): 
+        console.log('divide et impera');
+        break;
+      
+      case ((/%/.test(btnVal) || /√/.test(btnVal) || /1\/x/.test(btnVal) || /^[+/-]/.test(btnVal)) 
+            && this.isValidNumber(this.state.currentEl)):
+        this.handleNumTransformOp(btnVal);
         break;
        
-      case (/^C$/.test(btnVal)):
-        this.clearMainDisplay();
-        break;
-      case (/^CE$/.test(btnVal)):
-        this.resetCalculator();
-        break;
-
-      case (/^MC$/.test(btnVal)):
-        this.clearMemory();
+      case (/^C$/.test(btnVal) || /^CE$/.test(btnVal) || /^MC$/.test(btnVal)):
+        this.handleClearDisplays(btnVal);
         break;
 
       default: 
@@ -58,7 +49,56 @@ class Calculator extends Component {
     }
   }
 
-  getResult = (exp) => math.eval(exp.join(' '));
+
+  handleNumTransformOp = operand => {
+    if(/%/.test(operand)) {
+      this.setState({
+        currentEl: this.getPercent(this.state.currentEl)
+      })
+    } 
+    else if (/√/.test(operand)) {
+      if(+this.state.currentEl >= 0) {
+        this.setState({
+          currentEl: this.getSqrt(this.state.currentEl)
+        })
+      } else {
+        this.setState({
+          currentEl: 'ERROR'
+        })
+      }
+    }
+    else if(/1\/x/.test(operand)) {
+      this.setState({
+        currentEl: this.getFraction(this.state.currentEl)
+      })
+    }
+    else if(/^[+/-]/.test(operand)) {
+      this.setState({
+        currentEl: this.state.currentEl * -1
+      });
+    }
+  }
+
+  handleClearDisplays = btn => {
+    if(/^C$/.test(btn)) {
+      this.clearMainDisplay();
+    }
+    else if(/^CE$/.test(btn)) {
+      this.resetCalculator();
+    }
+    else if(/^MC$/.test(btn)) {
+      this.clearMemory();
+    }
+  }
+
+  handleEqualityPress = () => {
+    this.setState({
+      currentEl: this.getResult(this.state.formula),
+      equalityPressed: true,
+      memory: this.getResult(this.state.formula),
+      formula: []
+    });
+  }
 
   clearMainDisplay = () => {
     this.setState({
@@ -82,6 +122,23 @@ class Calculator extends Component {
       memory: ''
     })
   }
+
+  getResult = (exp) => math.eval(exp.join(' '));
+
+  getFraction = number => {
+    if(number !== '0') {
+      return 1 / number;
+    } else {
+      return 'NaN'
+    }
+  }
+
+  getSqrt = number => math.sqrt(number);
+
+  getPercent = number => number / 100;
+
+  isValidNumber = number => /^[+-.]?[0-9]{1,}(?:\.[0-9]{1,})?$/.test(number);
+
 
   render() {
     const { formula, memory, currentEl, result } = this.state;

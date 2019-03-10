@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
+import * as math from 'mathjs';
 import classes from './Calculator.css';
 import Buttons from '../../components/Buttons/Buttons';
 import Display from '../../components/Display/Display';
 import Header from '../../components/Header/Header';
 
-/*
 
-
-*/
 
 
 class Calculator extends Component {
@@ -15,81 +13,77 @@ class Calculator extends Component {
     super(props);
 
     this.state = {
-        formula: [],
-        memory: '',
-        currentEl: '',
-        result: null,
+        formula: ['33.56', '/', '12'],
+        memory: '12.555',
+        currentEl: '-33.063',
+        operator: '',
         equalityPressed: false
     }
   }
 
-
   handleCalculator = (e) => {
     const btnVal = e.target.textContent;
 
-    switch (btnVal !== undefined) {
+    switch(btnVal !== undefined) {
 
-      case /\.|[0-9]/.test(btnVal):
-        this.buildNumber(btnVal);
-        break;
 
-      case /^C$/.test(btnVal):
+      case (/=/.test(btnVal)):
+       console.log(this.getResult(this.state.formula));
+       break;
+       
+      case (/^C$/.test(btnVal)):
         this.clearMainDisplay();
         break;
-
-      case /^CE$/.test(btnVal):
+      case (/^CE$/.test(btnVal)):
         this.resetCalculator();
-        console.log('State after reset', this.state);
         break;
 
-      default:
-        console.log('End of Switch statement')
+      case (/^MC$/.test(btnVal)):
+        this.clearMemory();
+        break;
+
+      default: 
+        console.log('U hit the End of Switch Statement!');
+
+
     }
   }
 
-  buildNumber = async (char) => {
-    let oldNumber = this.state.currentEl;
-    let updatedNumber;
-    if(oldNumber.includes('.') && char === '.') {
-      updatedNumber = oldNumber;
-    } 
-    else if(oldNumber.startsWith('0') && char === '0') {
-      updatedNumber = oldNumber.slice(1, -1);
-    }
-    else {
-      updatedNumber = oldNumber + char;
-    }
-    await this.setState({
-      currentEl: updatedNumber
-    })
-    console.log('State after buildnumber', this.state);
-  }
+  getResult = (exp) => math.eval(exp.join(' '));
 
   clearMainDisplay = () => {
     this.setState({
-      currentEl: ''
+      currentEl: '0'
     })
   }
+
 
   resetCalculator = () => {
       this.setState({
         formula: [],
         memory: '',
-        currentEl: '',
-        result: null,
-        equalityPressed: false
+        currentEl: '0',
+        equalityPressed: false,
+        operator: ''
       })
   }
 
+  clearMemory = () => {
+    this.setState({
+      memory: ''
+    })
+  }
+
   render() {
-    const { formula, memory, currentEl } = this.state;
+    const { formula, memory, currentEl, result } = this.state;
     return (
       <div className={ classes.Calculator }>
           <Header />
           <Display 
               displayFormula={ formula.length > 0 ? formula.join(' ') : '' } 
               displayMemory={ memory !== '' ? `M: ${ memory }` : '' } 
-              displayCurrent={ currentEl === '' ? '0' : currentEl } 
+              displayCurrent={ currentEl } 
+              result={ result }
           />
           <Buttons handleCalculator={ this.handleCalculator } />
       </div>

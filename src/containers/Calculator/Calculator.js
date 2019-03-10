@@ -28,8 +28,19 @@ class Calculator extends Component {
 
 
       case (/=/.test(btnVal)):
-       console.log(this.getResult(this.state.formula));
+       this.setState({
+         currentEl: this.getResult(this.state.formula),
+         equalityPressed: true,
+         memory: this.getResult(this.state.formula),
+         formula: []
+       });
        break;
+
+      case (/^[+/-]/.test(btnVal)):
+        this.setState({
+          currentEl: this.state.currentEl * -1
+        });
+        break;
        
       case (/^C$/.test(btnVal)):
         this.clearMainDisplay();
@@ -44,8 +55,6 @@ class Calculator extends Component {
 
       default: 
         console.log('U hit the End of Switch Statement!');
-
-
     }
   }
 

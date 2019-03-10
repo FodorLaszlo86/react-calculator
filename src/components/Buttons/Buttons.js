@@ -13,7 +13,6 @@ const btnIDs = ['zero', 'one', 'two', 'three', 'four', 'five', 'six',
 const buttons = ({ handleCalculator }) => {
     const btnClasses = Object.values(classes);
     const btnClassesSliced = btnClasses.slice(2, btnClasses.length);
-    console.log(btnClassesSliced);
     const allBtn = btnValues.map((btn, i) => {
     return (
         <div 

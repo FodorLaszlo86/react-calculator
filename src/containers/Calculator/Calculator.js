@@ -15,7 +15,7 @@ class Calculator extends Component {
     this.state = {
         formula: ['33.56', '/', '12'],
         memory: '12.555',
-        currentEl: '9',
+        currentEl: '0',
         operator: '',
         equalityPressed: false
     }
@@ -26,6 +26,10 @@ class Calculator extends Component {
 
     switch(btnVal !== undefined) {
 
+
+      case (/\.|[0-9]/.test(btnVal)):
+        this.buildNumber(btnVal);
+        break;
 
       case (/=/.test(btnVal)):
         this.handleEqualityPress();
@@ -48,6 +52,64 @@ class Calculator extends Component {
         console.log('U hit the End of Switch Statement!');
     }
   }
+
+  buildExpression = () => {
+
+
+  }
+
+
+  buildNumber = digit => {
+    
+    if(this.state.currentEl === '0' && digit === '.') {
+      this.setState({
+        currentEl: this.state.currentEl + digit
+      })
+    }
+
+    else if (this.state.currentEl === '0' && /[0-9]/.test(digit)) {
+      this.setState({
+        currentEl: digit
+      })
+    }
+
+    else if(this.state.currentEl !== '0' && this.state.currentEl !== undefined) {
+      this.buildNumberHelper(digit);
+    }
+  }
+
+  buildNumberHelper = digit => {
+
+    const isDotIncluded = this.state.currentEl.includes('.');
+
+    if(!isDotIncluded && digit === '.') {
+      this.setState({
+        currentEl: this.state.currentEl + digit
+      })
+    } 
+
+    else if(!isDotIncluded && /[0-9]/.test(digit)) {
+      this.setState({
+        currentEl: this.state.currentEl + digit
+      })
+    }
+
+    else if(isDotIncluded && digit === '.') {
+      this.setState({
+        currentEl: this.state.currentEl
+      })
+    }
+
+    else if(isDotIncluded && /[0-9]/.test(digit)) {
+      this.setState({
+        currentEl: this.state.currentEl + digit
+      })
+    }
+  }
+
+
+
+  onlyOneDotCheck = (number, nextChar) => !number.includes('.') && nextChar === '.' ? number + nextChar : number;
 
 
   handleNumTransformOp = operand => {
@@ -72,9 +134,9 @@ class Calculator extends Component {
         currentEl: this.getFraction(this.state.currentEl)
       })
     }
-    else if(/^[+/-]/.test(operand)) {
+    else if(operand === '+/-') {
       this.setState({
-        currentEl: this.state.currentEl * -1
+        currentEl: (this.state.currentEl * -1).toString()
       });
     }
   }
@@ -127,18 +189,17 @@ class Calculator extends Component {
 
   getFraction = number => {
     if(number !== '0') {
-      return 1 / number;
+      return 1 / Number(number);
     } else {
       return 'NaN'
     }
   }
 
-  getSqrt = number => math.sqrt(number);
+  getSqrt = number => math.sqrt(number).toString();
 
-  getPercent = number => number / 100;
+  getPercent = number => (number / 100).toString();
 
   isValidNumber = number => /^[+-.]?[0-9]{1,}(?:\.[0-9]{1,})?$/.test(number);
-
 
   render() {
     const { formula, memory, currentEl, result } = this.state;

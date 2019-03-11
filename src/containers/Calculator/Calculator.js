@@ -29,8 +29,10 @@ class Calculator extends Component {
     switch(btnVal !== undefined) {
 
 
-      case ((this.isOperator(this.state.currentEl) && this.isOperator(btnVal)) && this.state.currentEl !== btnVal):
-        alert('Operator change coming up');
+      case ((this.isOperator(this.state.currentEl) && this.isOperator(btnVal))):
+        this.setState({
+          currentEl: btnVal
+        })
         break;
       // in case the currentEl is an OPERATOR and btnVal is a number
       case (this.isOperator(this.state.currentEl) && /\.|[0-9]/.test(btnVal)):
@@ -159,8 +161,6 @@ changeOperator = (btnVal) => {
       })
     }
   }
-
-
 
   onlyOneDotCheck = (number, nextChar) => !number.includes('.') && nextChar === '.' ? number + nextChar : number;
 

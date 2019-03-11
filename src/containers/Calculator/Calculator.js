@@ -29,17 +29,17 @@ class Calculator extends Component {
     switch(btnVal !== undefined) {
 
 
-      case ((this.isOperator(this.state.currentEl) && this.isOperator(btnVal))):
+      case ((this.isOperator(displayedElement) && this.isOperator(btnVal))):
         this.setState({
           currentEl: btnVal
         })
         break;
       // in case the currentEl is an OPERATOR and btnVal is a number
-      case (this.isOperator(this.state.currentEl) && /\.|[0-9]/.test(btnVal)):
+      case (this.isOperator(displayedElement) && /\.|[0-9]/.test(btnVal)):
         let newExpAfterOp = this.state.formula;
-        if(btnVal !== this.state.currentEl) {
+        if(btnVal !== displayedElement) {
           newExpAfterOp.slice(0, -1);
-          newExpAfterOp.push(this.state.currentEl);
+          newExpAfterOp.push(displayedElement);
         }
         this.setState({
           formula: newExpAfterOp,
@@ -47,14 +47,14 @@ class Calculator extends Component {
         });
         break;
 
-      case (/\.|[0-9]/.test(btnVal) && /\.|[0-9]/.test(this.state.currentEl)):
+      case (/\.|[0-9]/.test(btnVal) && /\.|[0-9]/.test(displayedElement)):
         this.buildNumber(btnVal);
         break;
 
       case (isOperator):
         // let isCurrentOperator = this.state.currentEl;
         let updatedExpression = this.state.formula;
-        updatedExpression.push(this.state.currentEl);
+        updatedExpression.push(displayedElement);
         this.setState({
           formula: updatedExpression,
           currentEl: btnVal
@@ -63,14 +63,14 @@ class Calculator extends Component {
 
       case (/=/.test(btnVal)):
         let newExpression = formula;
-        newExpression.push(this.state.currentEl);
+        newExpression.push(displayedElement);
         this.handleEqualityPress(newExpression);
         break;
 
       
       
       case ((/%/.test(btnVal) || /√/.test(btnVal) || /1\/x/.test(btnVal) || btnVal === '+/-') 
-            && this.isValidNumber(this.state.currentEl)):
+            && this.isValidNumber(displayedElement)):
         this.handleNumTransformOp(btnVal);
         break;
        
@@ -83,81 +83,57 @@ class Calculator extends Component {
     }
   }
 
-
-
-/*
-The expression:
-
-const changeOperator = (state, operator) => {
-    if(/[+-\/\*]/.test(state.formula[state.formula.length - 1]) && state.formula[state.formula.length - 1] !== operator) {
-        state.formula[state.formula.length - 1] = operator;
-    }
-}
-
-
-*/
-
-changeOperator = (btnVal) => {
-  const { formula } = this.state; 
-  if(this.isOperator(formula[formula.length - 1]) && formula[formula.length - 1] !== btnVal) {
-    let changeOpFormula = formula.slice(0, -1);
-    this.setState({
-      formula: changeOpFormula
-    })
-  }
-
-}
-
-
   buildExpression = (btn) => {
     
   }
 
 
   buildNumber = digit => {
+    const { currentEl } = this.state; 
     
-    if(this.state.currentEl === '0' && digit === '.') {
+    if(currentEl === '0' && digit === '.') {
       this.setState({
-        currentEl: this.state.currentEl + digit
+        currentEl: currentEl + digit
       })
     }
 
-    else if (this.state.currentEl === '0' && /[0-9]/.test(digit)) {
+    else if (currentEl === '0' && /[0-9]/.test(digit)) {
       this.setState({
         currentEl: digit
       })
     }
 
-    else if(this.state.currentEl !== '0' && this.state.currentEl !== undefined) {
+    else if(currentEl !== '0' && currentEl !== undefined) {
       this.buildNumberHelper(digit);
     }
   }
 
   buildNumberHelper = digit => {
+    const { currentEl } = this.state;
 
-    const isDotIncluded = this.state.currentEl.includes('.');
+    const isDotIncluded = currentEl.includes('.');
 
     if(!isDotIncluded && digit === '.') {
       this.setState({
-        currentEl: this.state.currentEl + digit
+        currentEl: currentEl + digit
       })
     } 
 
     else if(!isDotIncluded && /[0-9]/.test(digit)) {
       this.setState({
-        currentEl: this.state.currentEl + digit
+        currentEl: currentEl + digit
       })
     }
 
     else if(isDotIncluded && digit === '.') {
       this.setState({
-        currentEl: this.state.currentEl
+        currentEl: currentEl
       })
     }
 
     else if(isDotIncluded && /[0-9]/.test(digit)) {
       this.setState({
-        currentEl: this.state.currentEl + digit
+        currentEl: currentEl + digit
       })
     }
   }
@@ -166,15 +142,16 @@ changeOperator = (btnVal) => {
 
 
   handleNumTransformOp = operand => {
+    const { currentEl } = this.state;
     if(/%/.test(operand)) {
       this.setState({
-        currentEl: this.getPercent(this.state.currentEl)
+        currentEl: this.getPercent(currentEl)
       })
     } 
     else if (/√/.test(operand)) {
-      if(+this.state.currentEl >= 0) {
+      if(+currentEl >= 0) {
         this.setState({
-          currentEl: this.getSqrt(this.state.currentEl)
+          currentEl: this.getSqrt(currentEl)
         })
       } else {
         this.setState({
@@ -183,7 +160,7 @@ changeOperator = (btnVal) => {
       }
     }
     else if(/1\/x/.test(operand)) {
-      let oldElement = this.state.currentEl;
+      let oldElement = currentEl;
       let newElement = this.getFraction(oldElement);
       this.setState({
         currentEl: newElement
@@ -191,7 +168,7 @@ changeOperator = (btnVal) => {
     }
     else if(operand === '+/-') {
       this.setState({
-        currentEl: (this.state.currentEl * -1).toString()
+        currentEl: (currentEl * -1).toString()
       });
     }
   }

@@ -1,5 +1,6 @@
 /* Global styles */
 
+
 * {
   margin: 0;
   padding: 0;
@@ -16,10 +17,16 @@ html {
 }
 
 body {
-  background-image: linear-gradient(105deg, rgb(190, 190, 190), rgb(114, 109, 40), #000);
+  background-image: linear-gradient(105deg, rgb(25, 173, 179), rgb(40, 57, 114), #000);
   background-size: cover;
 }
 
 #root {
   max-height: 100%;
+}
+
+@media screen and (min-width: 1600px) {
+  html {
+    font-size: 72.5%
+  }
 }

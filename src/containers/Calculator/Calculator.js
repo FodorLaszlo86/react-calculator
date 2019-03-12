@@ -20,11 +20,10 @@ class Calculator extends Component {
 
   handleCalculator = (e) => {
     const btnVal = e.target.textContent;
-    const { currentEl: displayedElement, formula } = this.state;
+    const { currentEl: displayedElement, formula} = this.state;
     const isOperator = this.isOperator(btnVal);
 
     switch(btnVal !== undefined) {
-
 
       case ((this.isOperator(displayedElement) && this.isOperator(btnVal))):
         this.setState({
@@ -33,15 +32,7 @@ class Calculator extends Component {
         break;
       // in case the currentEl is an OPERATOR and btnVal is a number
       case (this.isOperator(displayedElement) && /\.|[0-9]/.test(btnVal)):
-        let newExpAfterOp = this.state.formula;
-        if(btnVal !== displayedElement) {
-          newExpAfterOp.slice(0, -1);
-          newExpAfterOp.push(displayedElement);
-        }
-        this.setState({
-          formula: newExpAfterOp,
-          currentEl: btnVal
-        });
+        this.buildExpression(btnVal);
         break;
 
       case (/\.|[0-9]/.test(btnVal) && /\.|[0-9]/.test(displayedElement)):
@@ -77,8 +68,16 @@ class Calculator extends Component {
     }
   }
 
-  buildExpression = (btn) => {
-    
+  buildExpression = btn => {
+    let newExpAfterOp = this.state.formula;
+    if(btn !== this.state.currentEl) {
+      newExpAfterOp.slice(0, -1);
+      newExpAfterOp.push(this.state.currentEl);
+    }
+    this.setState({
+      formula: newExpAfterOp,
+      currentEl: btn
+    });
   }
 
 
@@ -180,11 +179,11 @@ class Calculator extends Component {
     }
   }
 
-  handleEqualityPress = (expression) => {
+  handleEqualityPress = expression => {
     this.setState({
-      currentEl: this.getResult(expression),
+      currentEl: this.getResult(expression).toString(),
       equalityPressed: true,
-      memory: this.getResult(expression),
+      memory: this.getResult(expression).toString(),
       formula: []
     });
   }

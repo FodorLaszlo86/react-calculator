@@ -12,14 +12,11 @@ class Calculator extends Component {
 
     this.state = {
         formula: [],
-        memory: '12.555',
+        memory: '',
         currentEl: '0',
-        operator: '',
         equalityPressed: false
     }
   }
-
-  isOperator = (value) => value === '+' || value === '-' || value === '/' || value === '*';
 
   handleCalculator = (e) => {
     const btnVal = e.target.textContent;
@@ -52,7 +49,6 @@ class Calculator extends Component {
         break;
 
       case (isOperator):
-        // let isCurrentOperator = this.state.currentEl;
         let updatedExpression = this.state.formula;
         updatedExpression.push(displayedElement);
         this.setState({
@@ -60,16 +56,14 @@ class Calculator extends Component {
           currentEl: btnVal
         })
         break;
-
+    
       case (/=/.test(btnVal)):
         let newExpression = formula;
         newExpression.push(displayedElement);
         this.handleEqualityPress(newExpression);
         break;
-
       
-      
-      case ((/%/.test(btnVal) || /√/.test(btnVal) || /1\/x/.test(btnVal) || btnVal === '+/-') 
+      case ((/%/.test(btnVal) || /√/.test(btnVal) || /FR/.test(btnVal) || btnVal === '+/-') 
             && this.isValidNumber(displayedElement)):
         this.handleNumTransformOp(btnVal);
         break;
@@ -143,6 +137,7 @@ class Calculator extends Component {
 
   handleNumTransformOp = operand => {
     const { currentEl } = this.state;
+    console.log(operand);
     if(/%/.test(operand)) {
       this.setState({
         currentEl: this.getPercent(currentEl)
@@ -159,7 +154,7 @@ class Calculator extends Component {
         })
       }
     }
-    else if(/1\/x/.test(operand)) {
+    else if(/FR/.test(operand)) {
       let oldElement = currentEl;
       let newElement = this.getFraction(oldElement);
       this.setState({
@@ -232,6 +227,8 @@ class Calculator extends Component {
   getPercent = number => (number / 100).toString();
 
   isValidNumber = number => /^[+-.]?[0-9]{1,}(?:\.[0-9]{1,})?$/.test(number);
+
+  isOperator = (value) => value === '+' || value === '-' || value === '/' || value === '*';
 
   render() {
     const { formula, memory, currentEl, result } = this.state;

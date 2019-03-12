@@ -20,7 +20,7 @@ class Calculator extends Component {
 
   handleCalculator = (e) => {
     const btnVal = e.target.textContent;
-    const { currentEl: displayedElement, formula} = this.state;
+    const { currentEl: displayedElement, formula } = this.state;
     const isOperator = this.isOperator(btnVal);
 
     switch(btnVal !== undefined) {

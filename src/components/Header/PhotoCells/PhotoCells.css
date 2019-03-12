@@ -2,6 +2,8 @@
     width: 10rem;
     height: 2rem;
     background-color: rgb(49, 23, 9);
+    box-shadow: inset .1rem .2rem .8rem rgb(153, 75, 30),
+                inset -.6rem -.9rem .8rem rgb(29, 12, 2) ;
     border-radius: .3rem;
     display: grid;
     grid-template-columns: repeat(5, 1fr);

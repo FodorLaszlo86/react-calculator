@@ -21,6 +21,11 @@
 
 .Button:hover {
     background-image: linear-gradient(45deg, #1a1717, #000);
+    transform: scale(1.01);
+}
+
+.Button:active {
+    transform:scale(.99);
 }
 
 .Zero {

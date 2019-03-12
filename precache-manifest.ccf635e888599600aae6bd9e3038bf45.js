@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "/react-calculator/static/js/runtime~main.30fd8698.js"
   },
   {
-    "revision": "c3b8842227a32bd6e97f",
+    "revision": "1cb2c54baff94fcd852d",
     "url": "/react-calculator/static/js/main.1a04de7c.chunk.js"
   },
   {
@@ -12,11 +12,11 @@ self.__precacheManifest = [
     "url": "/react-calculator/static/js/2.92e3ae37.chunk.js"
   },
   {
-    "revision": "c3b8842227a32bd6e97f",
-    "url": "/react-calculator/static/css/main.53e74d53.chunk.css"
+    "revision": "1cb2c54baff94fcd852d",
+    "url": "/react-calculator/static/css/main.2e24315f.chunk.css"
   },
   {
-    "revision": "bb63ead847603c0a62a6608cd6f7773b",
+    "revision": "403239dbb6b05099914cf57638b7a162",
     "url": "/react-calculator/index.html"
   }
 ];

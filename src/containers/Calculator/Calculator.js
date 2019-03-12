@@ -30,7 +30,7 @@ class Calculator extends Component {
           currentEl: btnVal
         })
         break;
-      // in case the currentEl is an OPERATOR and btnVal is a number
+
       case (this.isOperator(displayedElement) && /\.|[0-9]/.test(btnVal)):
         this.buildExpression(btnVal);
         break;
@@ -40,12 +40,7 @@ class Calculator extends Component {
         break;
 
       case (isOperator):
-        let updatedExpression = this.state.formula;
-        updatedExpression.push(displayedElement);
-        this.setState({
-          formula: updatedExpression,
-          currentEl: btnVal
-        })
+        this.handleOperatorPress(btnVal, displayedElement);
         break;
     
       case (/=/.test(btnVal)):
@@ -64,7 +59,9 @@ class Calculator extends Component {
         break;
 
       default: 
-        console.log('U hit the End of Switch Statement!');
+        this.setState({
+          currentEl: btnVal
+        })
     }
   }
 
@@ -78,6 +75,15 @@ class Calculator extends Component {
       formula: newExpAfterOp,
       currentEl: btn
     });
+  }
+
+  handleOperatorPress = (btn, element) => {
+    let updatedExpression = this.state.formula;
+        updatedExpression.push(element);
+        this.setState({
+          formula: updatedExpression,
+          currentEl: btn
+        })
   }
 
 
